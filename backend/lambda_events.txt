@@ -1,0 +1,20 @@
+INIT_START Runtime Version: nodejs:20.v95	Runtime Version ARN: arn:aws:lambda:eu-west-3::runtime:2d788b26ac416854c5eb831c9f46cb2e0a0ddcee84b1a9b114acbdfdb644c8c1
+START RequestId: 7f7cb6f9-4b23-4983-b30e-d73d7f96399b Version: $LATEST
+END RequestId: 7f7cb6f9-4b23-4983-b30e-d73d7f96399b
+REPORT RequestId: 7f7cb6f9-4b23-4983-b30e-d73d7f96399b	Duration: 894.74 ms	Billed Duration: 1346 ms	Memory Size: 128 MB	Max Memory Used: 92 MB	Init Duration: 450.55 ms	
+START RequestId: a24b2996-49b9-48f5-a8ae-af61f180c61c Version: $LATEST
+END RequestId: a24b2996-49b9-48f5-a8ae-af61f180c61c
+REPORT RequestId: a24b2996-49b9-48f5-a8ae-af61f180c61c	Duration: 55.21 ms	Billed Duration: 56 ms	Memory Size: 128 MB	Max Memory Used: 92 MB	
+START RequestId: 2a4bb477-217a-4ddd-9436-5b0ffbc814ee Version: $LATEST
+END RequestId: 2a4bb477-217a-4ddd-9436-5b0ffbc814ee
+REPORT RequestId: 2a4bb477-217a-4ddd-9436-5b0ffbc814ee	Duration: 75.76 ms	Billed Duration: 76 ms	Memory Size: 128 MB	Max Memory Used: 92 MB	
+START RequestId: 630978c5-9be9-4765-ad8d-ca2313e8733c Version: $LATEST
+END RequestId: 630978c5-9be9-4765-ad8d-ca2313e8733c
+REPORT RequestId: 630978c5-9be9-4765-ad8d-ca2313e8733c	Duration: 36.41 ms	Billed Duration: 37 ms	Memory Size: 128 MB	Max Memory Used: 93 MB	
+START RequestId: aa7974a9-fc69-4fd1-bbf0-bf70cc7df874 Version: $LATEST
+END RequestId: aa7974a9-fc69-4fd1-bbf0-bf70cc7df874
+REPORT RequestId: aa7974a9-fc69-4fd1-bbf0-bf70cc7df874	Duration: 179.56 ms	Billed Duration: 180 ms	Memory Size: 128 MB	Max Memory Used: 93 MB	
+START RequestId: 0e32bb32-9c38-4a77-87de-683ad056612b Version: $LATEST
+END RequestId: 0e32bb32-9c38-4a77-87de-683ad056612b
+REPORT RequestId: 0e32bb32-9c38-4a77-87de-683ad056612b	Duration: 208.02 ms	Billed Duration: 209 ms	Memory Size: 128 MB	Max Memory Used: 93 MB	
+START RequestId: c4ca9577-1ce6-4e9d-9a95-e1d3522effaf Version: $LATEST

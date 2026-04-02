@@ -1,0 +1,192 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Mediatheque Backend - Lambda + DynamoDB
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    Timeout: 10
+    MemorySize: 128
+    Environment:
+      Variables:
+        MEDIAS_TABLE: Medias
+        LOANS_TABLE: Loans
+        USERS_TABLE: Users
+        DYNAMODB_ENDPOINT: ''
+  Api:
+    Cors:
+      AllowMethods: '''GET,POST,PUT,DELETE,OPTIONS'''
+      AllowHeaders: '''Content-Type,Authorization'''
+      AllowOrigin: '''*'''
+Resources:
+  MediasTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Medias
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+      - AttributeName: mediaId
+        AttributeType: S
+      KeySchema:
+      - AttributeName: mediaId
+        KeyType: HASH
+  LoansTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Loans
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+      - AttributeName: loanId
+        AttributeType: S
+      - AttributeName: userId
+        AttributeType: S
+      KeySchema:
+      - AttributeName: loanId
+        KeyType: HASH
+      GlobalSecondaryIndexes:
+      - IndexName: UserIdIndex
+        KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+        Projection:
+          ProjectionType: ALL
+  UsersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Users
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+      - AttributeName: userId
+        AttributeType: S
+      KeySchema:
+      - AttributeName: userId
+        KeyType: HASH
+  MediaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: MediaFunction
+      Handler: index.handler
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: MediasTable
+      Events:
+        GetAllMedia:
+          Type: Api
+          Properties:
+            Path: /api/media
+            Method: get
+        CreateMedia:
+          Type: Api
+          Properties:
+            Path: /api/media
+            Method: post
+        GetOneMedia:
+          Type: Api
+          Properties:
+            Path: /api/media/{id}
+            Method: get
+        UpdateMedia:
+          Type: Api
+          Properties:
+            Path: /api/media/{id}
+            Method: put
+        DeleteMedia:
+          Type: Api
+          Properties:
+            Path: /api/media/{id}
+            Method: delete
+    Metadata:
+      SamResourceId: MediaFunction
+  LoanFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: LoanFunction
+      Handler: index.handler
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: LoansTable
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: MediasTable
+      Events:
+        GetAllLoans:
+          Type: Api
+          Properties:
+            Path: /api/loans
+            Method: get
+        CreateLoan:
+          Type: Api
+          Properties:
+            Path: /api/loans
+            Method: post
+        UpdateLoan:
+          Type: Api
+          Properties:
+            Path: /api/loans/{id}
+            Method: put
+    Metadata:
+      SamResourceId: LoanFunction
+  UserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: UserFunction
+      Handler: index.handler
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: UsersTable
+      Events:
+        GetAllUsers:
+          Type: Api
+          Properties:
+            Path: /api/users
+            Method: get
+        UpdateUser:
+          Type: Api
+          Properties:
+            Path: /api/users/{id}
+            Method: put
+    Metadata:
+      SamResourceId: UserFunction
+  PostConfirmationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: PostConfirmationFunction
+      Handler: index.handler
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: UsersTable
+    Metadata:
+      SamResourceId: PostConfirmationFunction
+  UploadFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: UploadFunction
+      Handler: index.handler
+      Environment:
+        Variables:
+          S3_BUCKET: tpfinal-aws-buckets3-icham-243017877765-eu-west-3-an
+      Policies:
+      - S3CrudPolicy:
+          BucketName: tpfinal-aws-buckets3-icham-243017877765-eu-west-3-an
+      Events:
+        GetUploadUrl:
+          Type: Api
+          Properties:
+            Path: /api/upload
+            Method: post
+    Metadata:
+      SamResourceId: UploadFunction
+Outputs:
+  ApiUrl:
+    Description: API Gateway endpoint URL
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/
+  PostConfirmationFunctionArn:
+    Description: ARN of the Post Confirmation Lambda (to configure as Cognito trigger)
+    Value:
+      Fn::GetAtt:
+      - PostConfirmationFunction
+      - Arn
